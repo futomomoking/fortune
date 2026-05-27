@@ -130,10 +130,10 @@ body{
 
 
 /* =========================
-   ラッキーカラー
+   ラッキー情報
 ========================= */
 
-.color{
+.info{
 
     font-size:16px;
 
@@ -143,25 +143,7 @@ body{
 
 }
 
-
-
-/* =========================
-   誕生日
-========================= */
-
-.birthday{
-
-    margin-top:20px;
-
-    font-size:15px;
-
-    line-height:1.8;
-
-    opacity:0.82;
-
-}
-
-.birthdayTitle{
+.infoTitle{
 
     margin-bottom:4px;
 
@@ -533,7 +515,7 @@ body{
 <div class="cornerLogoWrap">
 
     <img
-    src="tarologo.png"
+    src="./logo.png"
     class="cornerLogo"
     alt="logo"
     />
@@ -727,69 +709,73 @@ rarity:"warning"
 
 
 /* =========================
-   誕生日
+   ラッキーフード
 ========================= */
 
-const birthdays = [
+const foods = [
 
-{
-date:"5-20",
-name:"王貞治",
-age:85
-},
-
-{
-date:"5-20",
-name:"オノ・ヨーコ",
-age:92
-},
-
-{
-date:"5-21",
-name:"プラトン",
-age:2453
-},
-
-{
-date:"5-24",
-name:"ボブ・ディラン",
-age:84
-}
+"カレー",
+"オムライス",
+"たまごサンド",
+"焼きそば",
+"ラーメン",
+"グミ",
+"チョコ",
+"餃子",
+"味噌汁",
+"ポテト",
+"プリン",
+"ハンバーグ",
+"唐揚げ",
+"アイス",
+"牛丼",
+"ドーナツ",
+"せんべい",
+"うどん",
+"たい焼き",
+"メロンパン",
+"冷凍チャーハン",
+"深夜のコンビニおにぎり",
+"駄菓子",
+"バター多めのトースト",
+"炭酸",
+"ちょっと高いポテチ",
+"ファミチキ",
+"屋台の焼きとうもろこし",
+"誰かにもらった飴",
+"実家のカレー"
 
 ];
 
 
 
-function getBirthdayText(){
+function getDailyFood(){
 
-const today = new Date();
+    const userId =
+    getUserId();
 
-const key =
-(today.getMonth()+1)
-+
-"-"
-+
-today.getDate();
+    const todayKey =
+    getTodayKey();
 
-const matched =
-birthdays.filter(
-b => b.date === key
-);
+    let seed = 0;
 
-if(matched.length === 0){
+    const combined =
+    "food" + userId + todayKey;
 
-return "今日は誰かの特別な日。";
+    for(let i=0; i<combined.length; i++){
 
-}
+        seed +=
+        combined.charCodeAt(i);
 
-return matched.map(b => {
+    }
 
-return `
-${b.name}
-（${b.age}歳）
-`;
+    const random =
+    seededRandom(seed);
 
-}).join("<br>");
+    const index =
+    Math.floor(random * foods.length);
+
+    return foods[index];
 
 }
 
@@ -993,6 +979,9 @@ function showFortune(){
 const fortune =
 getDailyFortune();
 
+const food =
+getDailyFood();
+
 playEffect(fortune.rarity);
 
 document
@@ -1007,19 +996,19 @@ ${fortune.message}
 
 <div class="divider"></div>
 
-<div class="color">
+<div class="info">
 Lucky Color — ${fortune.color}
 </div>
 
 <div class="divider"></div>
 
-<div class="birthday">
+<div class="info">
 
-<div class="birthdayTitle">
-今日の誕生日
+<div class="infoTitle">
+Today's Lucky Food
 </div>
 
-${getBirthdayText()}
+${food}
 
 </div>
 
